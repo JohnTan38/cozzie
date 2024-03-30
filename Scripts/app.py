@@ -162,11 +162,18 @@ def replace_date_with_status(file_name):
 
 email_receiver = st.text_input('To email recipient')
 if st.button("Send email"):
-    email_sender = "sxk2929@gmail.com"
+    #email_sender = "sxk2929@gmail.com"
+    email_sender = "john.tan@sh-cogent.com.sg"
     #email_receiver = st.text_input('To')
-    subject = status_inventory+ " DMS Inventory Status"
+    #subject = status_inventory+ " DMS Inventory Status"
     body = "Updated status. This message is computer generated. "+ datetime.today().strftime("%Y%m%d %H:%M:%S")
-    password = "usec qyjx xfcd syhw"
+    #password = "usec qyjx xfcd syhw"
+    password = "Realmadrid8983@"
+    
+    mailserver = smtplib.SMTP('smtp.office365.com',587)
+    mailserver.ehlo()
+    mailserver.starttls()
+    mailserver.login(email_sender, password)
     
     try:
         if email_receiver is not None:
@@ -175,15 +182,17 @@ if st.button("Send email"):
                 matchObj = re.search(rgx, email_receiver)
                 if not matchObj is None:
                     usr = matchObj.group(1)
+                    
             except:
                 pass
             list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
+            #list_csv = glob.glob("C:/Users/john.tan/Downloads/*.csv")
             latest_csv = max(list_csv, key=os.path.getctime)
 
         msg = MIMEMultipart()
         msg['From'] = email_sender
         msg['To'] = email_receiver
-        msg['Subject'] = subject
+        msg['Subject'] = 'DMS Inventory Status ' +datetime.today().strftime("%Y%m%d %H:%M:%S")
 
         msg.attach(MIMEText(body, 'plain'))
         filename = latest_csv
@@ -203,10 +212,13 @@ if st.button("Send email"):
         msg.attach(part)
         text = msg.as_string()
 
-        context = ssl.create_default_context() #login to secure server
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        #context = ssl.create_default_context() #login to secure server, 465 for ssl. smtplib.SMTP('smtp.office365.com',587)
+        with smtplib.SMTP("smtp.office365.com", 587) as server:
+            server.ehlo()
+            server.starttls()
             server.login(email_sender, password)
             server.sendmail(email_sender, email_receiver, text)
+            server.quit()
 
         st.success("Email sent successfully 💌 🚀")
     except Exception as e:
