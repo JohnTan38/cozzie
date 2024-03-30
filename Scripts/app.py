@@ -213,7 +213,7 @@ if st.button("Send email"):
         #)
 
         #msg.attach(part)
-        text = msg.as_string()
+        text = msg.as_string() + InventoryRepairAuth.reset_index(drop=True).to_html()
 
         #context = ssl.create_default_context() #login to secure server, 465 for ssl. smtplib.SMTP('smtp.office365.com',587)
         with smtplib.SMTP("smtp.office365.com", 587) as server:
