@@ -207,7 +207,7 @@ if st.button("Send email"):
         msg['To'] = email_receiver
         msg['Subject'] = 'DMS Inventory Status ' +datetime.today().strftime("%Y%m%d %H:%M:%S")
 
-        msg.attach(MIMEText(body, 'plain'))
+        msg.attach(MIMEText(body, 'html'))
         #filename = latest_csv
         #filename = "C:/Users/john.tan/Downloads/2024-03-30_AV.csv"
 
