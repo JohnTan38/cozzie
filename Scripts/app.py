@@ -187,9 +187,9 @@ if st.button("Send email"):
                 pass
             list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
             #list_csv = glob.glob("C:/Users/john.tan/Downloads/*.csv")
-            latest_csv = max(list_csv, key=os.path.getctime)
+            #latest_csv = max(list_csv, key=os.path.getctime)
             st.write(list_csv)
-            st.write(latest_csv)
+            
 
         msg = MIMEMultipart()
         msg['From'] = email_sender
