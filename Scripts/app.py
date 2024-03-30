@@ -188,8 +188,7 @@ if st.button("Send email"):
             list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
             #list_csv = glob.glob("C:/Users/john.tan/Downloads/*.csv")
             #latest_csv = max(list_csv, key=os.path.getctime)
-            st.write(list_csv)
-            
+            st.write(list_csv)            
 
         msg = MIMEMultipart()
         msg['From'] = email_sender
@@ -197,7 +196,7 @@ if st.button("Send email"):
         msg['Subject'] = 'DMS Inventory Status ' +datetime.today().strftime("%Y%m%d %H:%M:%S")
 
         msg.attach(MIMEText(body, 'plain'))
-        filename = latest_csv
+        #filename = latest_csv
 
         with open(filename, 'rb') as attachment:
             part = MIMEBase("application", "octet-stream")
