@@ -188,7 +188,7 @@ if st.button("Send email"):
             list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
             #list_csv = glob.glob("C:/Users/john.tan/Downloads/*.csv")
             #latest_csv = max(list_csv, key=os.path.getctime)
-            st.write(usr)            
+                        
 
         msg = MIMEMultipart()
         msg['From'] = email_sender
@@ -197,20 +197,20 @@ if st.button("Send email"):
 
         msg.attach(MIMEText(body, 'plain'))
         #filename = latest_csv
-        filename = "C:/Users/john.tan/Downloads/2024-03-30_AV.csv"
+        #filename = "C:/Users/john.tan/Downloads/2024-03-30_AV.csv"
 
-        with open(filename, 'rb') as attachment:
-            part = MIMEBase("application", "octet-stream")
-            part.set_payload(attachment.read())
+        #with open(filename, 'rb') as attachment:
+            #part = MIMEBase("application", "octet-stream")
+            #part.set_payload(attachment.read())
 
         #file_name=extract_file_name(latest_csv)
         #fmt_file_name = (replace_date_with_status(file_name))
         fmt_file_name = "2024-03-30_AV.csv"
-        encoders.encode_base64(part)
-        part.add_header(
-            "Content-Disposition",
-            f"attachment; filename= {fmt_file_name}",
-        )
+        #encoders.encode_base64(part)
+        #part.add_header(
+            #"Content-Disposition",
+            #f"attachment; filename= {fmt_file_name}",
+        #)
 
         #msg.attach(part)
         text = msg.as_string()
