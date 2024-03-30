@@ -197,7 +197,7 @@ if st.button("Send email"):
 
         msg.attach(MIMEText(body, 'plain'))
         #filename = latest_csv
-        filename = "C:/Users/john.tan/2024-03-30_AV.csv"
+        filename = "C:/Users/john.tan/Downloads/2024-03-30_AV.csv"
 
         with open(filename, 'rb') as attachment:
             part = MIMEBase("application", "octet-stream")
