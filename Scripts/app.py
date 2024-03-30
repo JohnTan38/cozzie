@@ -188,7 +188,7 @@ if st.button("Send email"):
             list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
             #list_csv = glob.glob("C:/Users/john.tan/Downloads/*.csv")
             #latest_csv = max(list_csv, key=os.path.getctime)
-            st.write(list_csv)            
+            st.write(usr)            
 
         msg = MIMEMultipart()
         msg['From'] = email_sender
@@ -212,7 +212,7 @@ if st.button("Send email"):
             f"attachment; filename= {fmt_file_name}",
         )
 
-        msg.attach(part)
+        #msg.attach(part)
         text = msg.as_string()
 
         #context = ssl.create_default_context() #login to secure server, 465 for ssl. smtplib.SMTP('smtp.office365.com',587)
