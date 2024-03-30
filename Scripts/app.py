@@ -164,9 +164,21 @@ email_receiver = st.text_input('To email recipient')
 if st.button("Send email"):
     #email_sender = "sxk2929@gmail.com"
     email_sender = "john.tan@sh-cogent.com.sg"
-    #email_receiver = st.text_input('To')
     #subject = status_inventory+ " DMS Inventory Status"
-    body = "Updated status. This message is computer generated. "+ datetime.today().strftime("%Y%m%d %H:%M:%S")
+    #body = "Updated status. This message is computer generated. "+ datetime.today().strftime("%Y%m%d %H:%M:%S")
+    body = """
+        <html>
+        <head>
+        <title>Dear User</title>
+        </head>
+        <body>
+        <p style="color: blue;font-size:25px;">DMS Inventory updated.</strong><br></p>
+
+        </body>
+        </html>
+
+        """+ InventoryRepairAuth.reset_index(drop=True).to_html() +"""
+        <br>This message is computer generated. """+ datetime.now().strftime("%Y%m%d %H:%M:%S")
     #password = "usec qyjx xfcd syhw"
     password = "Realmadrid8983@"
     
