@@ -179,8 +179,7 @@ if st.button("Send email"):
 
         """+ InventoryRepairAuth.reset_index(drop=True).to_html() +"""
         <br>This message is computer generated. """+ datetime.now().strftime("%Y%m%d %H:%M:%S")
-    #password = "usec qyjx xfcd syhw"
-    #password = "Realmadrid8983@"
+    
     password = st.secrets["password"]
     
     mailserver = smtplib.SMTP('smtp.office365.com',587)
