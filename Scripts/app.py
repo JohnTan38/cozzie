@@ -160,7 +160,7 @@ def replace_date_with_status(file_name):
     new_file_name = re.sub(r'T\d{2}-\d{2}\_export', '_'+status_inventory, file_name)
     return new_file_name
 
-email_receiver = st.text_input('To email recipient')
+email_receiver = st.text_input('To your email')
 if st.button("Send email"):
     #email_sender = "sxk2929@gmail.com"
     email_sender = "john.tan@sh-cogent.com.sg"
