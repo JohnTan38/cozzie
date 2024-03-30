@@ -203,7 +203,7 @@ if st.button("Send email"):
             part = MIMEBase("application", "octet-stream")
             part.set_payload(attachment.read())
 
-        file_name=extract_file_name(latest_csv)
+        #file_name=extract_file_name(latest_csv)
         #fmt_file_name = (replace_date_with_status(file_name))
         fmt_file_name = "2024-03-30_AV.csv"
         encoders.encode_base64(part)
