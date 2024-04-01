@@ -145,6 +145,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import glob, re, os
 from datetime import datetime
+import timedelta
 
 st.divider()
 st.write("Please download csv before send email")
@@ -165,7 +166,7 @@ if st.button("Send email"):
     #email_sender = "sxk2929@gmail.com"
     email_sender = "john.tan@sh-cogent.com.sg"
     #subject = status_inventory+ " DMS Inventory Status"
-    #body = "Updated status. This message is computer generated. "+ datetime.today().strftime("%Y%m%d %H:%M:%S")
+    #body = "Updated status. This message is computer generated. "+ (datetime.today()+ timedelta(hours=9)).strftime("%Y%m%d %H:%M:%S")
     body = """
         <html>
         <head>
@@ -178,7 +179,7 @@ if st.button("Send email"):
         </html>
 
         """+ InventoryRepairAuth.reset_index(drop=True).to_html() +"""
-        <br>This message is computer generated. """+ datetime.now().strftime("%Y%m%d %H:%M:%S")
+        <br>This message is computer generated. """+ (datetime.now()+ timedelta(hours=8)).strftime("%Y%m%d %H:%M:%S")
     
     password = st.secrets["password"]
     
@@ -205,7 +206,7 @@ if st.button("Send email"):
         msg = MIMEMultipart()
         msg['From'] = email_sender
         msg['To'] = email_receiver
-        msg['Subject'] = 'DMS Inventory Status ' +datetime.today().strftime("%Y%m%d %H:%M:%S")
+        msg['Subject'] = 'DMS Inventory Status ' +(datetime.today()+ timedelta(hours=9)).strftime("%Y%m%d %H:%M:%S")
 
         msg.attach(MIMEText(body, 'html'))
         #filename = latest_csv
