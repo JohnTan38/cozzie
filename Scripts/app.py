@@ -144,8 +144,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import glob, re, os
-from datetime import datetime
-import timedelta
+from datetime import datetime, timedelta
 
 st.divider()
 st.write("Please download csv before send email")
