@@ -206,7 +206,7 @@ if st.button("Send email"):
         msg = MIMEMultipart()
         msg['From'] = email_sender
         msg['To'] = email_receiver
-        msg['Subject'] = 'DMS Inventory Status ' +(datetime.today()+ timedelta(hours=9)).strftime("%Y%m%d %H:%M:%S")
+        msg['Subject'] = 'DMS Inventory Status COS '+status_inventory +(datetime.today()+ timedelta(hours=9)).strftime("%Y%m%d %H:%M:%S")
 
         msg.attach(MIMEText(body, 'html'))
         #filename = latest_csv
