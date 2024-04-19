@@ -77,7 +77,7 @@ if uploaded_file is None:
      st.write('Please upload a file')
 elif uploaded_file:
     list_ws = ['DMS INVENTORY', 'REPAIR ESTIMATE', 'MOVMENT OUT', 'AUTH', 'FORMULA AAP']
-
+    
     xl_uploaded = pd.ExcelFile(uploaded_file)
     lst_ws_uploaded = xl_uploaded.sheet_names
     if not compare_intersect(list_ws, lst_ws_uploaded):
@@ -113,38 +113,39 @@ elif uploaded_file:
         assert mask_repair.any()
         inventory_av = dmsInventory[mask_inventory]
         repairEstimate_md = repairEstimate[mask_repair]
-
+        
         #replace 'COSCO SHIPPING LINES (SINGAPORE) PTE LTD' with 'COS'
         repairEstimate_md['Customer'] = 'COS'
         inventory_av['Customer'] = 'COS'
 
         InventoryRepair = pd.merge(inventory_av, repairEstimate_md, on='Container')
-        InventoryRepair.drop(['Customer_y'], axis=1, inplace=True) #drop column 'Customer_y'
-
-        InventoryRepairAuth_0 = pd.merge(InventoryRepair, auth, on='Container', how='inner')
-
-        InventoryRepairAuth_0 = format_dataframe(InventoryRepairAuth_0)
-        InventoryRepairAuth_0 = gate_out_status(InventoryRepairAuth_0) #Call the function
+        InventoryRepair.drop(['Customer_x','Customer_y'], axis=1, inplace=True) #drop column 'Customer_x','Customer_y'
+        
+        #InventoryRepairAuth_0 = pd.merge(InventoryRepair, auth, on='Container', how='outer') ##
+        
+        #InventoryRepairAuth_0 = format_dataframe(InventoryRepair)
+        InventoryRepairAuth_0 = gate_out_status(InventoryRepair) #Call the function
         replace_nan_with_dash(InventoryRepairAuth_0, 'Rating')
         InventoryRepairAuth = sort_dataframe_col(InventoryRepairAuth_0, 'Container') #sort col
 
-        col_aap = ['Container', 'Container Current Status_Inventory', 'DMS Repair Price', 'COSCO AUTH PRICE', 'Repairer_Vendor', 
-                'DMS_GATE_OUT_STATUS', 'REPAIR COMPLETE STATUS-COSCO', 'REPAIR TYPE', '2nd EOR', 'DMS Gate in', 'Rating']
+        col_aap = ['Container', 'Container Current Status_Inventory', 'DMS Repair Price', 'Repairer_Vendor', 
+                'DMS_GATE_OUT_STATUS', 'Rating'] #'COSCO AUTH PRICE', 'REPAIR COMPLETE STATUS-COSCO', '2nd EOR', 'DMS Gate in', 'REPAIR TYPE'
         InventoryRepairAuth = InventoryRepairAuth[col_aap]
+
 
 st.write('Click to get updated status')
 if st.button("Get dataframe"):
     with st.spinner("Processing..."):
         st.dataframe(InventoryRepairAuth.reset_index(drop=True), use_container_width=True)
         success_df("Dataframe is ready 💸")
-
+        
 import smtplib, email, ssl
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import glob, re, os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 st.divider()
 st.write("Please download csv before send email")
@@ -160,12 +161,13 @@ def replace_date_with_status(file_name):
     new_file_name = re.sub(r'T\d{2}-\d{2}\_export', '_'+status_inventory, file_name)
     return new_file_name
 
-email_receiver = st.text_input('To your email')
+email_receiver = st.text_input('To email recipient')
 if st.button("Send email"):
     #email_sender = "sxk2929@gmail.com"
     email_sender = "john.tan@sh-cogent.com.sg"
+    #email_receiver = st.text_input('To')
     #subject = status_inventory+ " DMS Inventory Status"
-    #body = "Updated status. This message is computer generated. "+ (datetime.today()+ timedelta(hours=9)).strftime("%Y%m%d %H:%M:%S")
+
     body = """
         <html>
         <head>
@@ -178,8 +180,12 @@ if st.button("Send email"):
         </html>
 
         """+ InventoryRepairAuth.reset_index(drop=True).to_html() +"""
-        <br>This message is computer generated. """+ (datetime.now()+ timedelta(hours=8)).strftime("%Y%m%d %H:%M:%S")
-    
+        
+        <br>This message is computer generated. """+ datetime.now().strftime("%Y%m%d %H:%M:%S")
+
+    #body = "Updated status. This message is computer generated. "+ datetime.today().strftime("%Y%m%d %H:%M:%S")
+    #password = "usec qyjx xfcd syhw"
+    #password = "Realmadrid8983@"
     password = st.secrets["password"]
     
     mailserver = smtplib.SMTP('smtp.office365.com',587)
@@ -199,33 +205,30 @@ if st.button("Send email"):
                 pass
             list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
             #list_csv = glob.glob("C:/Users/john.tan/Downloads/*.csv")
-            #latest_csv = max(list_csv, key=os.path.getctime)
-                        
+            latest_csv = max(list_csv, key=os.path.getctime)
 
         msg = MIMEMultipart()
         msg['From'] = email_sender
         msg['To'] = email_receiver
-        msg['Subject'] = 'DMS Inventory Status - COS '+status_inventory+' '+(datetime.today()+ timedelta(hours=8)).strftime("%Y%m%d %H:%M:%S")
-
+        msg['Subject'] = 'DMS Inventory Status ' +datetime.today().strftime("%Y%m%d %H:%M:%S")
+        
         msg.attach(MIMEText(body, 'html'))
-        #filename = latest_csv
-        #filename = "C:/Users/john.tan/Downloads/2024-03-30_AV.csv"
+        filename = latest_csv
 
-        #with open(filename, 'rb') as attachment:
-            #part = MIMEBase("application", "octet-stream")
-            #part.set_payload(attachment.read())
+        with open(filename, 'rb') as attachment:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(attachment.read())
 
-        #file_name=extract_file_name(latest_csv)
-        #fmt_file_name = (replace_date_with_status(file_name))
-        fmt_file_name = "2024-03-30_AV.csv"
-        #encoders.encode_base64(part)
-        #part.add_header(
-            #"Content-Disposition",
-            #f"attachment; filename= {fmt_file_name}",
-        #)
+        file_name=extract_file_name(latest_csv)
+        fmt_file_name = (replace_date_with_status(file_name))
+        encoders.encode_base64(part)
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename= {fmt_file_name}",
+        )
 
-        #msg.attach(part)
-        text = msg.as_string() + InventoryRepairAuth.reset_index(drop=True).to_html()
+        msg.attach(part)
+        text = msg.as_string() 
 
         #context = ssl.create_default_context() #login to secure server, 465 for ssl. smtplib.SMTP('smtp.office365.com',587)
         with smtplib.SMTP("smtp.office365.com", 587) as server:
