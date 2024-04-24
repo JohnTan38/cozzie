@@ -107,7 +107,7 @@ elif uploaded_file:
     
         mask_inventory = (dmsInventory['Customer'].isin(['COS'])) & (dmsInventory['Container Current Status_Inventory'].isin([status_inventory])) #2
         #mask_movement = (movementOut['Customer'].isin(['COS'])) & (movementOut['Status'].isin(['AV']))
-        mask_repair = (repairEstimate['Customer'].isin(['COS', 'COSCO SHIPPING LINES (SINGAPORE) PTE LTD'])) & (repairEstimate['Repairer_Vendor'].isin(['MD GLOBAL', 'Eastern Repairer', 'Eastern Imran', 'Eastern Hafiz'
+        mask_repair = (repairEstimate['Customer'].isin(['COS', 'COSCO SHIPPING LINES (SINGAPORE) PTE LTD'])) & (repairEstimate['Repairer_Vendor'].isin(['MD GLOBAL', 'Eastern Repairer', 'Eastern Imran', 'Eastern Hafiz',
                                                                                                                                   'MD Bala', 'MD Imran', 'MD Rasel', 'Gopi', 'Abu Zaar Amiruddin Bin Jasri']))
         assert mask_inventory.any() # sanity check that the mask is selecting something
         assert mask_repair.any()
