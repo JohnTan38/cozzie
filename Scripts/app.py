@@ -203,9 +203,9 @@ if st.button("Send email"):
                     
             except:
                 pass
-            list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
-            #list_csv = glob.glob("C:/Users/john.tan/Downloads/*.csv")
-            latest_csv = max(list_csv, key=os.path.getctime)
+            #list_csv = glob.glob("C:/Users/"+usr+"/Downloads/*.csv")
+            
+            #latest_csv = max(list_csv, key=os.path.getctime)
 
         msg = MIMEMultipart()
         msg['From'] = email_sender
@@ -213,19 +213,19 @@ if st.button("Send email"):
         msg['Subject'] = 'DMS Inventory Status '+status_inventory+ ' '+ datetime.today().strftime("%Y%m%d %H:%M:%S")
         
         msg.attach(MIMEText(body, 'html'))
-        filename = latest_csv
+        #filename = latest_csv
 
-        with open(filename, 'rb') as attachment:
-            part = MIMEBase("application", "octet-stream")
-            part.set_payload(attachment.read())
+        #with open(filename, 'rb') as attachment:
+            #part = MIMEBase("application", "octet-stream")
+            #part.set_payload(attachment.read())
 
-        file_name=extract_file_name(latest_csv)
-        fmt_file_name = (replace_date_with_status(file_name))
-        encoders.encode_base64(part)
-        part.add_header(
-            "Content-Disposition",
-            f"attachment; filename= {fmt_file_name}",
-        )
+        #file_name=extract_file_name(latest_csv)
+        #fmt_file_name = (replace_date_with_status(file_name))
+        #encoders.encode_base64(part)
+        #part.add_header(
+            #"Content-Disposition",
+            #f"attachment; filename= {fmt_file_name}",
+        #)
 
         #msg.attach(part)
         text = msg.as_string() 
