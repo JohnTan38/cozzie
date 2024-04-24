@@ -185,7 +185,7 @@ if st.button("Send email"):
 
     #body = "Updated status. This message is computer generated. "+ datetime.today().strftime("%Y%m%d %H:%M:%S")
     #password = "usec qyjx xfcd syhw"
-    #password = "Realmadrid8983@"
+    
     password = st.secrets["password"]
     
     mailserver = smtplib.SMTP('smtp.office365.com',587)
@@ -210,7 +210,7 @@ if st.button("Send email"):
         msg = MIMEMultipart()
         msg['From'] = email_sender
         msg['To'] = email_receiver
-        msg['Subject'] = 'DMS Inventory Status ' +datetime.today().strftime("%Y%m%d %H:%M:%S")
+        msg['Subject'] = 'DMS Inventory Status '+status_inventory+ ' '+ datetime.today().strftime("%Y%m%d %H:%M:%S")
         
         msg.attach(MIMEText(body, 'html'))
         filename = latest_csv
