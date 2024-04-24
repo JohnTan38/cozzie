@@ -227,7 +227,7 @@ if st.button("Send email"):
             f"attachment; filename= {fmt_file_name}",
         )
 
-        msg.attach(part)
+        #msg.attach(part)
         text = msg.as_string() 
 
         #context = ssl.create_default_context() #login to secure server, 465 for ssl. smtplib.SMTP('smtp.office365.com',587)
